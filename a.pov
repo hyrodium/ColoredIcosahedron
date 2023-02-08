@@ -105,8 +105,9 @@ global_settings{assumed_gamma 1.0}
 #end
 background{rgb<1,1,1>}
 
-#declare N=50;
+#declare N=100;
 #declare r=0.08;
+#declare R=(1+0.5*(T2-T8))*r;
 
 #declare c1 = rgb<0.8,0.2,0.0>;
 #declare c2 = rgb<0.2,0.8,0.0>;
@@ -137,15 +138,18 @@ background{rgb<1,1,1>}
     (T2-T8)*q + (1-(T2-T8))*<cos(-2*pi*w),sin(-2*pi*w),phi*(w-1/2)*2>
 #end
 
-
-#declare helix = sphere_sweep {
-    linear_spline
-    N+1,
-    #declare i=0;
-    #while(i<N+1)
-        p(a+i*(b-a)/N),r
-        #declare i=i+1;
-    #end
+#declare helix = union{
+    sphere_sweep {
+        linear_spline
+        N+1,
+        #declare i=0;
+        #while(i<N+1)
+            p(a+i*(b-a)/N),r
+            #declare i=i+1;
+        #end
+    }
+    sphere{p(a), R}
+    sphere{p(b), R}
 };
 
 #declare helix2 = union{
